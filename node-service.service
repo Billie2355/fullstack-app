@@ -1,0 +1,11 @@
+[Unit]
+Description=Node.js Backend Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/node /home/ubuntu/fullstack-app/backend/index.js
+WorkingDirectory=/home/ubuntu/fullstack-app/backend
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
