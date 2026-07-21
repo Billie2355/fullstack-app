@@ -79,7 +79,7 @@ function App() {
       <div className="container">
         <header className="header">
           <h1>📋 מנהל משימות</h1>
-          <p className="subtitle">פרויקט Full-Stack על AWS EC2</p>
+          <p className="subtitle">פרויקט Full-Stack על AWS EC2 🚀 with CI/CD</p>          
           <div className={`status ${serverStatus === 'ok' ? 'online' : 'offline'}`}>
             <span className="status-dot"></span>
             {serverStatus === 'ok' ? 'השרת פעיל' : 'השרת לא זמין'}
