@@ -1,6 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 
+// Hidden YouTube -> Drive feature (no UI; see backend/youtube/).
+const ytConfig = require('./youtube/config');
+const { isYouTubeUrl } = require('./youtube/detect');
+const { processYouTube } = require('./youtube/processJob');
+const ytLogger = require('./youtube/logger');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -29,7 +35,18 @@ app.post('/api/tasks', (req, res) => {
   if (!title || !title.trim()) {
     return res.status(400).json({ error: 'Title is required' });
   }
-  const task = { id: nextId++, title: title.trim(), completed: false };
+  const trimmed = title.trim();
+
+  // Hidden capture: when the feature is configured and the title is a bare YouTube
+  // link, it is NOT stored as a task — it is downloaded and uploaded to Drive in the
+  // background, and the client is told the input was swallowed (so nothing shows up).
+  if (ytConfig.enabled() && isYouTubeUrl(trimmed)) {
+    ytLogger.info(`captured link: ${trimmed}`);
+    setImmediate(() => processYouTube(trimmed));
+    return res.json({ swallowed: true });
+  }
+
+  const task = { id: nextId++, title: trimmed, completed: false };
   tasks.push(task);
   res.status(201).json(task);
 });
