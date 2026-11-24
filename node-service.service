@@ -3,6 +3,9 @@ Description=Node.js Backend Server
 After=network.target
 
 [Service]
+# Secrets for the hidden YouTube -> Drive feature. The leading "-" means the service
+# still starts if the file is absent (feature stays dormant until it exists).
+EnvironmentFile=-/home/ubuntu/youtube-feature/secrets.env
 ExecStart=/usr/bin/node /home/ubuntu/fullstack-app/backend/index.js
 WorkingDirectory=/home/ubuntu/fullstack-app/backend
 Restart=always

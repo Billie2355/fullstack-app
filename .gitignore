@@ -4,3 +4,10 @@ build/
 .env
 *.pem
 .DS_Store
+
+# YouTube -> Drive feature: never commit secrets or local auth material
+secrets.env
+oauth-client.json
+cookies.txt
+token.json
+backend/scripts/oauth-client.json

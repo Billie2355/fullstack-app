@@ -46,6 +46,10 @@ function App() {
         body: JSON.stringify({ title: newTask })
       })
       const task = await res.json()
+      if (task && task.swallowed) {
+        setNewTask('')
+        return
+      }
       setTasks([...tasks, task])
       setNewTask('')
     } catch {
