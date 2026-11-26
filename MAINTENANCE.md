@@ -14,7 +14,7 @@
 | Frontend | React/Vite, מוגש מ‑`/var/www/html` |
 | CI/CD | push ל‑`main` → GitHub Actions → SSH ל‑EC2 → `git pull` + build + `restart node-service` |
 | אחסון משימות | בזיכרון בלבד (מתאפס בכל restart) |
-| דיסק | EBS root (הוגדל ל 16GB). swap של 2GB ב‑`/swapfile`. |
+| דיסק | EBS root (הוגדל ל‑16GB). swap של 2GB ב‑`/swapfile`. |
 
 מבנה על המכונה: הקוד ב‑`/home/ubuntu/fullstack-app/`, תוצר ה‑build ב‑`/var/www/html/`, מצב/סודות הפיצ'ר ב‑`/home/ubuntu/youtube-feature/`.
 
@@ -139,3 +139,25 @@ YT_PROXY_URL=http://user:pass@proxy-host:port
    sudo resize2fs /dev/nvme0n1p1
    df -h /
    ```
+
+---
+
+## ניהול חשבון AWS — Free Plan ← Paid
+
+החשבון נפתח תחת מודל ה‑Free Plan החדש (מיולי 2025). ה‑Free Plan פג במוקדם מבין: 6 חודשים מפתיחת החשבון, או כשנגמרים הקרדיטים. **כשהוא פג, AWS סוגר את החשבון וה‑EC2 נכבה** (הנתונים נשמרים 90 יום, ואז נמחקים לצמיתות אם לא משדרגים). כדי שהשירות ימשיך לרוץ ללא הפרעה — יש לשדרג ל‑Paid plan לפני תום התקופה.
+
+### שדרוג ל‑Paid plan
+1. היכנסי ל‑Console עם חשבון הבעלים (root) או משתמש עם הרשאות Billing.
+2. חיפוש → **Billing and Cost Management**.
+3. לחצי **Upgrade plan** (באנר/תפריט בקונסול) → **Upgrade account**.
+4. הוסיפי אמצעי תשלום (כרטיס) ואשרי.
+
+⚠️ אל תצרפי את החשבון ל‑AWS Organizations בתהליך — זה משדרג ל‑Paid אבל מפקיע את הקרדיטים מיד. אחרי שדרוג רגיל, הקרדיטים שנותרו ממשיכים לכסות שימוש עד שהם נגמרים או עד 12 חודשים מפתיחת החשבון; רק מעבר לכך יש חיוב רגיל.
+
+### התראת תקציב
+Billing and Cost Management → **Budgets** → **Create budget** → Cost budget → סכום חודשי (למשל $15) → ספי התראה (50%/80%/100%, ואפשר גם $0.01 כדי לדעת מתי הקרדיטים נגמרו) → אימייל → Create.
+
+### הקטנת עלויות (רשות)
+- EC2 → Instances: לזהות את סוג המכונה (הגורם העיקרי לעלות).
+- לנקות Volumes / Snapshots / Elastic IPs שלא בשימוש.
+- מכונה קטנה 24/7 + דיסק + כתובת IPv4 ציבורית ≈ $10–15 לחודש.
