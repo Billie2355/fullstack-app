@@ -28,7 +28,10 @@ simply becomes a normal task.
 | `YT_DOWNLOAD_TIMEOUT_MS` | no | `300000` | per download |
 
 ## Host prerequisites (installed once on the EC2, not via CI/CD)
-- `ffmpeg`, `yt-dlp` (recent), a JS runtime (node/deno) for signature solving
+- `ffmpeg`, `yt-dlp` (recent)
+- **Deno** on PATH (e.g. `/usr/local/bin`) — yt-dlp solves YouTube signature /
+  n-sig challenges with it. The download passes `--remote-components ejs:github`
+  to fetch the EJS solver scripts (cached after first run).
 - bgutil PO-token provider listening on `127.0.0.1:4416`
 - a valid `cookies.txt` exported from a logged-in YouTube session
 

@@ -31,6 +31,10 @@ function buildArgs(url, outTemplate) {
   const args = [
     '-x', '--audio-format', 'mp3', '--audio-quality', '0',
     '--no-playlist', '--no-progress',
+    // Fetch the EJS challenge-solver scripts from GitHub so YouTube signature /
+    // n-sig challenges can be solved. Requires a JS runtime (deno) on the host;
+    // the scripts are cached after the first run.
+    '--remote-components', 'ejs:github',
     '-o', outTemplate,
   ];
 
@@ -41,7 +45,7 @@ function buildArgs(url, outTemplate) {
   } else {
     // Default free path: cookies + bgutil PO-token provider on localhost.
     if (fs.existsSync(config.cookiesPath)) args.push('--cookies', config.cookiesPath);
-    args.push('--extractor-args', `youtube:getpot_bgutil_baseurl=${config.potBaseUrl}`);
+    args.push('--extractor-args', `youtubepot-bgutilhttp:base_url=${config.potBaseUrl}`);
   }
 
   args.push(url);
